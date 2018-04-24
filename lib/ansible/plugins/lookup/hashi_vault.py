@@ -207,6 +207,21 @@ class HashiVault:
             raise AnsibleError("Authentication method app role requires a secret_id")
 
         self.client.auth_approle(role_id, secret_id)
+        
+    def auth_userpass(self, **kwargs):
+        username = kwargs.get('username')
+        if username is None:
+            raise AnsibleError("Authentication method userpass requires a username")
+
+        password = kwargs.get('password')
+        if password is None:
+            raise AnsibleError("Authentication method userpass requires a password")
+
+        mount_point = kwargs.get('mount_point')
+        if mount_point is None:
+            mount_point = 'userpass'
+
+        self.client.auth_userpass(username, password, mount_point)
 
 
 class LookupModule(LookupBase):
